@@ -1,4 +1,5 @@
 ﻿using aspDocker.Models;
+using aspDocker.ToolModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,11 +21,33 @@ namespace aspDocker.Controllers
         }
 
 
-        // GET: api/<NoteController>
+        /// <summary>
+        /// Get all notes for the specified UserId
+        /// </summary>
+        /// <param name="applicationUserId"></param>
+        /// <returns></returns>
         [HttpGet]
-        public IEnumerable<Note> Get()
+        public IActionResult Get([FromQuery] NoteFilterModel query)
         {
-            return _context.Notes.ToList();
+            IQueryable<Note> noteQuery = _context.Notes;
+            
+            // Return for user
+            noteQuery = query.UserId != null ? noteQuery.Where(c => c.ApplicationUserId == query.UserId) : noteQuery;
+
+            // Filtering by Title contents
+            noteQuery = !String.IsNullOrEmpty(query.NoteTitleContains) ? noteQuery.Where(c => c.NoteTitle.Contains(query.NoteTitleContains)) : noteQuery;
+
+            // Filtering by Body contents
+            noteQuery = !String.IsNullOrEmpty(query.NoteTextContains) ? noteQuery.Where(c => c.NoteBody.Contains(query.NoteTextContains)) : noteQuery;
+
+            // Pagination
+            if (query.Skip != null && query.Take != null)
+            {
+                noteQuery = noteQuery.OrderByDescending(c => c.NoteId).Skip(query.Skip.Value - 1 * query.ItemsPerPage.Value).Take(query.Take.Value);
+            }
+
+            return noteQuery.ToList().Count > 0 ? Ok(noteQuery.ToList()) : NoContent(); 
+
         }
 
         // GET api/<NoteController>/5

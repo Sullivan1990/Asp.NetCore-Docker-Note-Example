@@ -30,7 +30,7 @@ namespace aspDocker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<NoteContext>(c => c.UseSqlServer("Server=mssql;Database=NoteDB;User=sa;Password=abc_1234"));
+            services.AddDbContext<NoteContext>(c => c.UseSqlServer("Server=127.0.0.1,1433;Database=NoteDB;User=sa;Password=abc_1234"));
 
 
             services.AddControllers();
@@ -43,7 +43,7 @@ namespace aspDocker
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            DatabaseManagementService.MigrationInitialisation(app);
+            //DatabaseManagementService.MigrationInitialisation(app);
 
             app.UseDeveloperExceptionPage();
                 app.UseSwagger();

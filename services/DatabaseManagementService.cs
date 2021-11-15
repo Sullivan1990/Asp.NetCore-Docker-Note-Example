@@ -11,6 +11,10 @@ namespace aspDocker.services
 {
     public static class DatabaseManagementService
     {
+        /// <summary>
+        /// Apply the latest migrations to the specified context
+        /// </summary>
+        /// <param name="app"></param>
         public static void MigrationInitialisation(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())
