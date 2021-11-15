@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>aspDocker</name>
+    </assembly>
+    <members>
+        <member name="M:aspDocker.Controllers.NoteController.Get(aspDocker.ToolModels.NoteFilterModel)">
+            <summary>
+            Get all notes for the specified UserId
+            </summary>
+            <remarks>
+            Allows for returning a list of Notes based on various input parameters.
+            </remarks>
+            <param name="query"> A Query Object that will deconstruct the various parameters provided</param>
+            <returns></returns>
+        </member>
+        <member name="M:aspDocker.services.DatabaseManagementService.MigrationInitialisation(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Apply the latest migrations to the specified context
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="T:aspDocker.ToolModels.NoteFilterModel">
+            <summary>
+            A Utility class to handle various parameters recieved when querying the Note Endpoints
+            </summary>
+        </member>
+        <member name="P:aspDocker.ToolModels.NoteFilterModel.Page">
+            <summary>
+            The Page to display - used by the Skip method, with the provided value - 1 multiplied by the provided items per page
+            </summary>
+        </member>
+        <member name="P:aspDocker.ToolModels.NoteFilterModel.ItemsPerPage">
+            <summary>
+            The number of items to display per page, Default of 10
+            </summary>
+        </member>
+        <member name="P:aspDocker.ToolModels.NoteFilterModel.UserId">
+            <summary>
+            the UserId to show notes for, if blank will show notes for all users
+            </summary>
+        </member>
+        <member name="P:aspDocker.ToolModels.NoteFilterModel.NoteTitleContains">
+            <summary>
+            Text to filter Note titles by
+            </summary>
+        </member>
+        <member name="P:aspDocker.ToolModels.NoteFilterModel.NoteTextContains">
+            <summary>
+            Text to filter Note bodies by
+            </summary>
+        </member>
+    </members>
+</doc>

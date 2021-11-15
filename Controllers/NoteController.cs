@@ -24,9 +24,14 @@ namespace aspDocker.Controllers
         /// <summary>
         /// Get all notes for the specified UserId
         /// </summary>
-        /// <param name="applicationUserId"></param>
+        /// <remarks>
+        /// Allows for returning a list of Notes based on various input parameters.
+        /// </remarks>
+        /// <param name="query"> A Query Object that will deconstruct the various parameters provided</param>
         /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(typeof(List<Note>), 200)]
+        [ProducesResponseType(typeof(string), 404)]
         public IActionResult Get([FromQuery] NoteFilterModel query)
         {
             IQueryable<Note> noteQuery = _context.Notes;
@@ -41,12 +46,12 @@ namespace aspDocker.Controllers
             noteQuery = !String.IsNullOrEmpty(query.NoteTextContains) ? noteQuery.Where(c => c.NoteBody.Contains(query.NoteTextContains)) : noteQuery;
 
             // Pagination
-            if (query.Skip != null && query.Take != null)
+            if (query.Page != null)
             {
-                noteQuery = noteQuery.OrderByDescending(c => c.NoteId).Skip(query.Skip.Value - 1 * query.ItemsPerPage.Value).Take(query.Take.Value);
+                noteQuery = noteQuery.OrderByDescending(c => c.NoteId).Skip((query.Page.Value - 1) * query.ItemsPerPage.Value).Take(query.ItemsPerPage.Value);
             }
 
-            return noteQuery.ToList().Count > 0 ? Ok(noteQuery.ToList()) : NoContent(); 
+            return noteQuery.ToList().Count > 0 ? Ok(noteQuery.ToList()) : NotFound("No Results Found"); 
 
         }
 

@@ -15,6 +15,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using aspDocker.Models;
 using aspDocker.services;
+using Microsoft.Extensions.PlatformAbstractions;
+using System.Reflection;
+using System.IO;
 
 namespace aspDocker
 {
@@ -23,6 +26,15 @@ namespace aspDocker
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+        }
+        static string XmlCommentsFilePath
+        {
+            get
+            {
+                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                var fileName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name + ".xml";
+                return Path.Combine(basePath, fileName);
+            }
         }
 
         public IConfiguration Configuration { get; }
@@ -37,6 +49,7 @@ namespace aspDocker
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "asp_Docker", Version = "v1" });
+                c.IncludeXmlComments(XmlCommentsFilePath);
             });
         }
 
